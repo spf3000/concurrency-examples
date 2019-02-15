@@ -18,9 +18,9 @@ object TaskHello {
     val blockScheduler = Scheduler.io(name="blocking-io")
 
     println(s"hello from thread ${Thread.currentThread.getName()} main method")
-    val l = (1 to 1000000).toList
-    val source =  Task.gather{l.map(n => hello(n))}
-    source.executeOn(blockScheduler)
+    val l = (1 to 10000).toList
+    val source = Task.sequence{l.map(n => hello(n))}
+//    source.executeOn(blockScheduler)
       .runToFuture
   }
 

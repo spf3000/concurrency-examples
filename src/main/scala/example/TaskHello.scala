@@ -16,7 +16,6 @@ object TaskHello {
 
     import monix.execution.Scheduler.Implicits.global
     val blockScheduler = Scheduler.io(name="blocking-io")
-
     println(s"hello from thread ${Thread.currentThread.getName()} main method")
     val l = (1 to 10000).toList
     val source = Task.sequence{l.map(n => hello(n))}

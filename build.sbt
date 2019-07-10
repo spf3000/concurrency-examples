@@ -8,10 +8,12 @@ ThisBuild / organizationName := "example"
 lazy val root = (project in file("."))
   .settings(
     name := "concurrency-examples",
+    resolvers += Resolver.sonatypeRepo("snapshots"),
     libraryDependencies ++= Seq(
     scalaTest % Test,
     "com.typesafe.akka" %% "akka-http" % "10.0.10",
     "io.monix" %% "monix" % "3.0.0-RC2",
-    "org.typelevel" %% "cats-effect" % "1.3.1"
+    "org.typelevel" %% "cats-effect" % "1.3.1",
+    "org.scalaz" %% "scalaz-zio" % "1.0-RC5"
 )
   )

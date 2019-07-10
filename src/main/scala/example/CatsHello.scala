@@ -11,16 +11,29 @@ object CatsHello extends IOApp {
   val blockingEC =
     ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
 
-  def doSth(n: Int): IO[Unit] =
-    IO(Thread.sleep(1000)).map(_ => println(s"hello from cats! $n"))
+  def blockingOp = IO(Thread.sleep(1000))
+  def doSth(n: Int): IO[Unit] = IO {
+    println(s"hello from cats! $n")
+  }
 
-    def churn() =
-      List.range(1,1000).map(n => contextShift.evalOn(blockingEC)(doSth(n))).parSequence
+  //start with doSth
+  def churn() =
+    List
+      .range(1, 1000)
+      .map(doSthBlock)
+      .sequence
 
+  def doSthBlock(n: Int) =
+    for {
+      _ <- contextShift.evalOn(blockingEC)(blockingOp)
+      _ <- doSth(n)
+    } yield ()
 
   override def run(args: List[String]): IO[ExitCode] =
     churn *> IO(ExitCode.Success)
-
+//    for {
+//      _ <- contextShift.evalOn(blockingEC)(blockingOp)
+//      _ <- churn
+//    } yield (ExitCode.Success)
 
 }
-//n => contextShift.evalOn(blockingEC)

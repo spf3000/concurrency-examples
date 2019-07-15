@@ -19,9 +19,8 @@ object CatsHello extends IOApp {
   //start with doSth
   def churn() =
     List
-      .range(1, 1000)
+      .range(1, 100)
       .map(doSthBlock)
-      .sequence
 
   def doSthBlock(n: Int) =
     for {
@@ -30,10 +29,8 @@ object CatsHello extends IOApp {
     } yield ()
 
   override def run(args: List[String]): IO[ExitCode] =
-    churn *> IO(ExitCode.Success)
-//    for {
-//      _ <- contextShift.evalOn(blockingEC)(blockingOp)
-//      _ <- churn
-//    } yield (ExitCode.Success)
+    churn.parSequence *> IO(ExitCode.Success)
+
+  //parSequence
 
 }

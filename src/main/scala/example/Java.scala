@@ -3,7 +3,7 @@ object Java {
   def hello(n: Int) =
     new Thread {
       override def run(): Unit = {
-        //      Thread.sleep(1000)
+              Thread.sleep(1000)
         println(
           s"hello from thread ${Thread.currentThread.getName()} java $n"
         )

@@ -8,18 +8,19 @@ object TaskHello {
 
   def hello(n: Int) =
     Task {
+      Thread.sleep(1000)
       println(s"hello from thread ${Thread.currentThread.getName()} task $n")
-    }.delayExecution(2 seconds)
+    }
 
   def main(args: Array[String]): Unit = {
 
     import monix.execution.Scheduler.Implicits.global
     val blockScheduler = Scheduler.io(name = "blocking-io")
     println(s"hello from thread ${Thread.currentThread.getName()} main method")
-    val l = (1 to 10000).toList
+    val l = (1 to 1000).toList
     val source = Task.gather { l.map(n => hello(n)) }
     source
-//      .executeOn(blockScheduler)
+    //  .executeOn(blockScheduler)
     .runToFuture
       .onComplete(_ => sys.exit)
   }
